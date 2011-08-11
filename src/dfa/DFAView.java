@@ -30,11 +30,15 @@ import javax.swing.table.TableColumnModel;
  */
 public class DFAView extends FrameView {
     
-    public MiModelo modeloTabla;  
+    public MiModelo modeloTabla; 
+    public boolean inicial,inicio;
+    public Object e[];
+    public String estadoInicial;
     public DFAView(SingleFrameApplication app) {
         super(app);
         modeloTabla = new MiModelo();
-    
+        inicial=false;
+        inicio=true;
         initComponents();
         jTable1.setVisible(false);
        
@@ -187,6 +191,11 @@ public class DFAView extends FrameView {
         jTable1.setRowSelectionAllowed(false);
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.setUpdateSelectionOnSort(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Clicktabla(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -263,29 +272,57 @@ public class DFAView extends FrameView {
 
     private void CrearTabla(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CrearTabla
 
-        String estados=jTextField1.getText(),estadosV[],alfabeto=jTextField2.getText(),alfabetoV[],extados="",extadosV[];
-        boolean b[],c;
-        estadosV=estados.split(",");
-        alfabetoV=alfabeto.split(",");
-        extadosV=extados.split("");
-        Object a[]=alfabetoV;
-        Object e[]=estadosV;
-        modeloTabla.addColumn("Inicial" );
-        modeloTabla.addColumn("Aceptador");
-        modeloTabla.addColumn("&",e); 
-        for(int i=0;i<alfabetoV.length;i++)modeloTabla.addColumn(a[i]);
-        jTable1.setVisible(true);
- 
+        if(inicio){
+        
+            String estados=jTextField1.getText(),estadosV[],alfabeto=jTextField2.getText(),alfabetoV[],extados="",extadosV[];
+            boolean b[],c;
+            estadosV=estados.split(",");
+            alfabetoV=alfabeto.split(",");
+            extadosV=extados.split("");
+            Object a[]=alfabetoV;
+            e=estadosV;
+            modeloTabla.addColumn("Inicial" );
+            modeloTabla.addColumn("Aceptador");
+            modeloTabla.addColumn("&",e); 
+            for(int i=0;i<alfabetoV.length;i++)modeloTabla.addColumn(a[i]);
+            jTable1.setVisible(true);
+            inicio=false;
+        }
     }//GEN-LAST:event_CrearTabla
+
+    private void Clicktabla(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Clicktabla
+
+    
+        int fila = jTable1.rowAtPoint(evt.getPoint());
+        int columna = jTable1.columnAtPoint(evt.getPoint());
+        if ((fila > -1) && (columna == 0) && !inicial){
+            if(modeloTabla.getValueAt(fila,columna).equals(true)){
+                System.out.println(modeloTabla.getValueAt(fila,columna));
+                estadoInicial=(String)modeloTabla.getValueAt(fila,columna+2);
+                System.out.println("Estado inicial: "+estadoInicial);
+                inicial=true;
+                boolean x=modeloTabla.isCellEditable(fila, columna);
+            }
+        }
+    }//GEN-LAST:event_Clicktabla
     public class MiModelo extends DefaultTableModel
     {
-
         @Override
         public Class getColumnClass(int columna)
         {
             if (columna == 0) return Boolean.class;
             if (columna == 1) return Boolean.class;
         return Object.class;
+        }
+        @Override
+        public boolean isCellEditable (int row, int column)
+        {
+            if(column == 2)
+                return false;
+            if(column==0 && inicial){
+                return false;
+            }
+            return true;
         }
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
