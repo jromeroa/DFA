@@ -33,7 +33,8 @@ public class DFAView extends FrameView {
     public MiModelo modeloTabla; 
     public boolean inicial,inicio;
     public Object e[];
-    public String estadoInicial;
+    public String estadoInicial,matriz[][],estados,estadosV[],alfabeto,alfabetoV[],extados="",extadosV[];;
+    public int filaf,columnac;
     public DFAView(SingleFrameApplication app) {
         super(app);
         modeloTabla = new MiModelo();
@@ -180,6 +181,11 @@ public class DFAView extends FrameView {
 
         jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
         jButton2.setName("jButton2"); // NOI18N
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                CargarDatos(evt);
+            }
+        });
         mainPanel.add(jButton2);
         jButton2.setBounds(290, 360, 97, 23);
 
@@ -214,6 +220,7 @@ public class DFAView extends FrameView {
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(dfa.DFAApp.class).getContext().getActionMap(DFAView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
+        exitMenuItem.setText(resourceMap.getString("exitMenuItem.text")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
 
@@ -223,6 +230,7 @@ public class DFAView extends FrameView {
         helpMenu.setName("helpMenu"); // NOI18N
 
         aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
+        aboutMenuItem.setText(resourceMap.getString("aboutMenuItem.text")); // NOI18N
         aboutMenuItem.setName("aboutMenuItem"); // NOI18N
         helpMenu.add(aboutMenuItem);
 
@@ -272,9 +280,11 @@ public class DFAView extends FrameView {
 
     private void CrearTabla(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CrearTabla
 
+        
         if(inicio){
         
-            String estados=jTextField1.getText(),estadosV[],alfabeto=jTextField2.getText(),alfabetoV[],extados="",extadosV[];
+            estados=jTextField1.getText();
+            alfabeto=jTextField2.getText();
             boolean b[],c;
             estadosV=estados.split(",");
             alfabetoV=alfabeto.split(",");
@@ -287,6 +297,7 @@ public class DFAView extends FrameView {
             for(int i=0;i<alfabetoV.length;i++)modeloTabla.addColumn(a[i]);
             jTable1.setVisible(true);
             inicio=false;
+            matriz=new String[modeloTabla.getColumnCount()-2][modeloTabla.getRowCount()];
         }
     }//GEN-LAST:event_CrearTabla
 
@@ -295,6 +306,7 @@ public class DFAView extends FrameView {
     
         int fila = jTable1.rowAtPoint(evt.getPoint());
         int columna = jTable1.columnAtPoint(evt.getPoint());
+                       ////////////   CAPTURO ESTADO INICIAL  ///////////////////////
         if ((fila > -1) && (columna == 0) && !inicial){
             if(modeloTabla.getValueAt(fila,columna).equals(true)){
                 System.out.println(modeloTabla.getValueAt(fila,columna));
@@ -302,9 +314,48 @@ public class DFAView extends FrameView {
                 System.out.println("Estado inicial: "+estadoInicial);
                 inicial=true;
                 boolean x=modeloTabla.isCellEditable(fila, columna);
+                filaf=fila;
+                columnac=columna;
+            }
+        }if(evt.getClickCount()==3){
+            modeloTabla.setValueAt(false,filaf,columnac);
+            inicial=false;
+            estadoInicial="";
+            System.out.println("Estado inicial: "+estadoInicial);
+        }    //////////////     CAPTURO ESTADOS ACEPTADORES  OJO ESTE ES EL METODO QUE FALTA PARA Q RETORNE LOS ACEPTADORES  ///////////////////////
+        if ((fila > -1) && (columna == 1)){
+            if(modeloTabla.getValueAt(fila,columna).equals(true)){
+                System.out.println(modeloTabla.getValueAt(fila,columna));
+                
+                ///////////////   ESTE ESTADO INICIAL QUE SE ENVIA A LA CLASE  /////////////
+                
+                estadoInicial=(String)modeloTabla.getValueAt(fila,columna+2);
+                
+                
+                System.out.println("Estado inicial: "+estadoInicial);
+                inicial=true;
+                boolean x=modeloTabla.isCellEditable(fila, columna);
+                filaf=fila;
+                columnac=columna;
             }
         }
     }//GEN-LAST:event_Clicktabla
+
+    private void CargarDatos(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CargarDatos
+
+        
+        //////////////             ESTA ES LA MATRIZ CARGADA Q RECIBE LA CLASE   /////////////
+        
+        for(int o=2,y=0;o<modeloTabla.getColumnCount();o++,y++){
+        
+            for(int ex=0;ex<modeloTabla.getRowCount();ex++){
+                
+                matriz[y][ex]=(String)modeloTabla.getValueAt(ex, o);
+               System.out.print(" "+matriz[y][ex]);
+            }
+        }
+     
+    }//GEN-LAST:event_CargarDatos
     public class MiModelo extends DefaultTableModel
     {
         @Override

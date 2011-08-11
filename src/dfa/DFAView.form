@@ -85,6 +85,9 @@
             <Property name="text" type="java.lang.String" resourceKey="jButton2.text"/>
             <Property name="name" type="java.lang.String" value="jButton2" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="CargarDatos"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="290" y="360" width="-1" height="-1"/>
@@ -168,6 +171,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="org.jdesktop.application.Application" id="quit" methodName="quit"/>
                 </Property>
+                <Property name="text" type="java.lang.String" resourceKey="exitMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="exitMenuItem" noResource="true"/>
               </Properties>
               <AuxValues>
@@ -192,6 +196,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="dfa.DFAView" id="showAboutBox" methodName="showAboutBox"/>
                 </Property>
+                <Property name="text" type="java.lang.String" resourceKey="aboutMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="aboutMenuItem" noResource="true"/>
               </Properties>
               <AuxValues>
